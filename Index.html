@@ -3,235 +3,332 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaMoha - Preventive Skincare, Backed by Science</title>
+    <title>SaMoha - Preventive Skincare, Rooted in Science & Wisdom</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Lora', 'serif'],
                     },
                     colors: {
-                        'brand-deep-green': '#1a3a3a',
-                        'brand-light-green': '#e0e8e5',
-                        'brand-beige': '#f5f1ed',
-                        'brand-gray': '#5a5a5a',
-                        'brand-accent': '#c5a880',
+                        'brand-cream': '#FBF9F6',
+                        'brand-charcoal': '#313131',
+                        'brand-gold': '#B08D57',
+                        'brand-stone': '#A9A9A9',
+                        'brand-bg': '#F3EFEB',
                     }
                 }
             }
         }
     </script>
     <style>
-        /* Simple scrollbar styling for a more elegant feel */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.645, 0.045, 0.355, 1), transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
         }
-        ::-webkit-scrollbar-track {
-            background: #f5f1ed;
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
-        ::-webkit-scrollbar-thumb {
-            background-color: #c5a880;
-            border-radius: 10px;
-            border: 2px solid #f5f1ed;
+        .reveal-bg {
+            position: relative;
+            overflow: hidden;
+        }
+        .reveal-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #FBF9F6;
+            transform: scaleX(1);
+            transform-origin: right;
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .reveal-bg.visible::after {
+            transform: scaleX(0);
+            transform-origin: left;
         }
     </style>
 </head>
-<body class="bg-brand-beige text-brand-deep-green font-sans antialiased">
+<body class="bg-brand-cream text-brand-charcoal font-sans antialiased">
 
-    <!-- Header --><header id="header" class="bg-brand-beige/80 backdrop-blur-md sticky top-0 z-50 transition-all duration-300">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold tracking-wider">SaMoha</a>
-            <nav class="hidden md:flex items-center space-x-8">
-                <a href="#philosophy" class="hover:text-brand-accent transition-colors duration-300">Our Philosophy</a>
-                <a href="#products" class="hover:text-brand-accent transition-colors duration-300">Products</a>
-                <a href="#ritual" class="hover:text-brand-accent transition-colors duration-300">The Ritual</a>
-                <a href="#about" class="hover:text-brand-accent transition-colors duration-300">About Us</a>
-                <a href="#community" class="hover:text-brand-accent transition-colors duration-300">Community</a>
+    <!-- Announcement Bar -->
+    <div class="bg-brand-charcoal text-brand-cream text-center py-2.5 px-4 text-xs tracking-widest uppercase">
+        Complimentary Shipping on Orders Over ₹999
+    </div>
+
+    <!-- Header -->
+    <header id="header" class="bg-brand-cream/70 backdrop-blur-lg sticky top-0 z-50 transition-shadow duration-300">
+        <div class="container mx-auto px-6 py-5 flex justify-between items-center">
+            <a href="#" class="text-3xl font-serif font-medium tracking-tight">SaMoha</a>
+            <nav class="hidden lg:flex items-center space-x-10 text-sm">
+                <a href="#ritual-products" class="hover:text-brand-gold transition-colors duration-300">The Ritual</a>
+                <a href="#philosophy" class="hover:text-brand-gold transition-colors duration-300">Philosophy</a>
+                <a href="#ingredients" class="hover:text-brand-gold transition-colors duration-300">Ingredients</a>
+                <a href="#leadership" class="hover:text-brand-gold transition-colors duration-300">Our Team</a>
             </nav>
-            <a href="#products" class="hidden md:block bg-brand-deep-green text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-all duration-300">Shop Now</a>
-            <button id="mobile-menu-button" class="md:hidden text-2xl">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-            </button>
+            <div class="flex items-center space-x-5">
+                 <button class="hover:text-brand-gold transition-colors duration-300"><i data-lucide="search" class="w-5 h-5"></i></button>
+                 <button class="hover:text-brand-gold transition-colors duration-300"><i data-lucide="user" class="w-5 h-5"></i></button>
+                 <button class="hover:text-brand-gold transition-colors duration-300"><i data-lucide="shopping-bag" class="w-5 h-5"></i></button>
+                 <button id="mobile-menu-button" class="lg:hidden text-2xl">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
         </div>
-        <!-- Mobile Menu --><div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
-            <a href="#philosophy" class="block py-2">Our Philosophy</a>
-            <a href="#products" class="block py-2">Products</a>
-            <a href="#ritual" class="block py-2">The Ritual</a>
-            <a href="#about" class="block py-2">About Us</a>
-            <a href="#community" class="block py-2">Community</a>
-            <a href="#products" class="block mt-4 bg-brand-deep-green text-white text-center px-6 py-2 rounded-full">Shop Now</a>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden px-6 pb-4 bg-brand-cream shadow-lg">
+            <a href="#ritual-products" class="block py-2">The Ritual</a>
+            <a href="#philosophy" class="block py-2">Philosophy</a>
+            <a href="#ingredients" class="block py-2">Ingredients</a>
+            <a href="#leadership" class="block py-2">Our Team</a>
         </div>
     </header>
 
     <main>
-        <!-- Hero Section --><section class="relative h-[90vh] min-h-[600px] flex items-center">
-            <div class="absolute inset-0 bg-black opacity-30"></div>
-            <img src="https://placehold.co/1800x1200/e0e8e5/1a3a3a?text=SaMoha" alt="Serene natural background for SaMoha skincare" class="absolute inset-0 w-full h-full object-cover">
-            <div class="relative container mx-auto px-6 text-center text-white">
-                <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-4">Preventive Skincare, Backed by Science.</h1>
-                <p class="text-lg md:text-xl max-w-3xl mx-auto mb-8">Uniting the wisdom of Indian botanicals with high-efficacy formulations for proactive, long-term skin health.</p>
-                <a href="#products" class="bg-white text-brand-deep-green px-10 py-3 rounded-full font-semibold hover:bg-brand-light-green transition-all duration-300">Discover The Ritual</a>
+        <!-- Hero Section -->
+        <section class="relative h-[90vh] min-h-[700px] flex items-center bg-brand-bg">
+             <div class="container mx-auto px-6 grid md:grid-cols-2 items-center gap-12">
+                <div class="z-10 fade-in-up">
+                    <h1 class="text-4xl md:text-6xl font-serif leading-tight mb-4">The Antidote to Confusion.</h1>
+                    <p class="text-lg md:text-xl text-brand-charcoal/80 mb-8 max-w-lg">
+                        Rooted in the philosophy of prevention, we unite the wisdom of Indian botanicals with scientifically-validated, high-efficacy formulations.
+                    </p>
+                    <a href="#ritual-products" class="bg-brand-charcoal text-white px-10 py-3.5 rounded-full font-semibold hover:bg-brand-gold transition-all duration-300 text-base group">
+                        Discover The Ritual <span class="inline-block transform group-hover:translate-x-1 transition-transform">→</span>
+                    </a>
+                </div>
+                 <div class="relative h-full hidden md:block">
+                     <div class="absolute inset-0 w-full h-full flex items-center justify-center">
+                         <img src="https://images.pexels.com/photos/7262995/pexels-photo-7262995.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Elegant skincare product bottles against a soft, neutral background" class="max-w-full h-auto object-contain reveal-bg" style="max-height: 80vh;">
+                     </div>
+                 </div>
             </div>
         </section>
 
-        <!-- Our Philosophy Section --><section id="philosophy" class="py-20 md:py-32">
-            <div class="container mx-auto px-6 text-center">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">The Antidote to Confusion</h2>
-                <p class="max-w-3xl mx-auto text-brand-gray mb-16">In a market of information overload, we offer a clear, effective, and trustworthy alternative. We believe precaution is the best way to achieve beauty, empowering you with solutions that are transparent, scientifically validated, and rooted in nature.</p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    <!-- Value 1: Transparency --><div class="flex flex-col items-center">
-                        <div class="w-16 h-16 bg-brand-light-green rounded-full flex items-center justify-center mb-4">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-brand-deep-green"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">Transparency & Education</h3>
-                        <p class="text-brand-gray">Demystifying skincare with clear information about our high-quality ingredients and science-backed formulations.</p>
+        <!-- Our Philosophy Section -->
+        <section id="philosophy" class="py-24">
+            <div class="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+                <div class="fade-in-up">
+                    <h2 class="text-3xl md:text-4xl font-serif mb-6">Precaution is the Best Way to Achieve Beauty.</h2>
+                    <p class="text-brand-charcoal/80 mb-6">Today's skincare consumer faces a crisis of trust. The market is saturated with mass-produced synthetics and unsubstantiated claims. This creates a powerful demand for a brand that delivers transparency, scientific validation, and tangible results.</p>
+                    <p class="text-brand-charcoal/80">SaMoha is that brand. We are the antidote. We empower you with proactive, clean, and effective solutions, making holistic, scientifically-backed beauty accessible to a new generation of conscious consumers.</p>
+                </div>
+                 <div class="grid grid-cols-2 gap-6 fade-in-up" style="transition-delay: 200ms;">
+                    <div class="bg-brand-bg p-8 rounded-lg text-center">
+                        <i data-lucide="test-tube-2" class="w-12 h-12 text-brand-gold mx-auto mb-4"></i>
+                        <h3 class="font-semibold text-lg mb-2">Dermocosmetics</h3>
+                        <p class="text-sm text-brand-charcoal/70">Clinical-grade results through botanical actives.</p>
                     </div>
-                    <!-- Value 2: Scientific Efficacy --><div class="flex flex-col items-center">
-                        <div class="w-16 h-16 bg-brand-light-green rounded-full flex items-center justify-center mb-4">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-brand-deep-green"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">Scientific Efficacy</h3>
-                        <p class="text-brand-gray">Delivering tangible results by investing in research and using proven, high-performance botanical actives.</p>
+                     <div class="bg-brand-bg p-8 rounded-lg text-center">
+                        <i data-lucide="book-marked" class="w-12 h-12 text-brand-gold mx-auto mb-4"></i>
+                        <h3 class="font-semibold text-lg mb-2">Radical Transparency</h3>
+                        <p class="text-sm text-brand-charcoal/70">Demystifying skincare with clear, honest information.</p>
                     </div>
-                    <!-- Value 3: Sustainability --><div class="flex flex-col items-center">
-                        <div class="w-16 h-16 bg-brand-light-green rounded-full flex items-center justify-center mb-4">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-brand-deep-green"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">Conscious & Sustainable</h3>
-                        <p class="text-brand-gray">Prioritizing the health of our planet with eco-conscious materials, elegant glass packaging, and sustainable sourcing.</p>
+                     <div class="bg-brand-bg p-8 rounded-lg text-center">
+                        <i data-lucide="package-check" class="w-12 h-12 text-brand-gold mx-auto mb-4"></i>
+                        <h3 class="font-semibold text-lg mb-2">Conscious Luxury</h3>
+                        <p class="text-sm text-brand-charcoal/70">Elegant, sustainable glass packaging.</p>
+                    </div>
+                    <div class="bg-brand-bg p-8 rounded-lg text-center">
+                        <i data-lucide="users" class="w-12 h-12 text-brand-gold mx-auto mb-4"></i>
+                        <h3 class="font-semibold text-lg mb-2">Inclusivity</h3>
+                        <p class="text-sm text-brand-charcoal/70">Products designed for a wide range of skin types and tones.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Products Section --><section id="products" class="py-20 md:py-32 bg-brand-light-green">
+        <!-- Products Section: The Preventive Care Ritual -->
+        <section id="ritual-products" class="py-24 bg-brand-bg">
             <div class="container mx-auto px-6">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-4">The Preventive Care Ritual</h2>
-                    <p class="max-w-2xl mx-auto text-brand-gray">A complete yet minimalist routine focused on long-term skin health. Three essential products designed to work in synergy.</p>
+                <div class="text-center mb-16 max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-serif mb-4">Meet The Preventive Care Ritual</h2>
+                    <p class="text-brand-charcoal/80">A curated "hero" line of three essential products designed to work in synergy. This is your complete, minimalist routine for long-term, proactive skin health.</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Product 1 --><div class="bg-white rounded-lg shadow-lg overflow-hidden group">
-                        <img src="https://placehold.co/600x600/FFFFFF/1a3a3a?text=Soothing+Aloe+Vera+Cleanser" alt="Soothing Aloe Vera Cleanser" class="w-full h-64 object-cover">
-                        <div class="p-6 text-center">
-                            <h3 class="text-xl font-bold mb-2">Soothing Aloe Vera Cleanser</h3>
-                            <p class="text-brand-gray mb-4">Gently removes impurities without stripping the skin's natural moisture barrier.</p>
-                            <a href="#" class="inline-block bg-brand-deep-green text-white px-8 py-3 rounded-full font-semibold hover:bg-opacity-90 transition-all duration-300">Shop Now</a>
+                    <!-- Product Card 1 -->
+                    <div class="bg-brand-cream rounded-lg group text-center fade-in-up">
+                        <div class="relative overflow-hidden rounded-lg">
+                            <img src="https://images.pexels.com/photos/7263013/pexels-photo-7263013.jpeg?auto=compress&cs=tinysrgb&w=800" alt="SaMoha Soothing Aloe Vera Cleanser" class="w-full h-96 object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="py-6">
+                            <h3 class="text-lg font-semibold">Soothing Aloe Vera Cleanser</h3>
+                            <p class="text-sm text-brand-stone my-1">Gentle & Hydrating</p>
+                            <p class="text-lg font-medium mt-2">₹1,250</p>
+                            <button class="mt-4 bg-brand-charcoal text-white text-sm px-6 py-2 rounded-full font-medium hover:bg-brand-gold transition-colors duration-300">Add to Bag</button>
                         </div>
                     </div>
-                    <!-- Product 2 --><div class="bg-white rounded-lg shadow-lg overflow-hidden group">
-                        <img src="https://placehold.co/600x600/FFFFFF/1a3a3a?text=Vitamin+C+Radiance+Serum" alt="Vitamin C Radiance Serum" class="w-full h-64 object-cover">
-                        <div class="p-6 text-center">
-                            <h3 class="text-xl font-bold mb-2">Vitamin C Radiance Serum</h3>
-                            <p class="text-brand-gray mb-4">A potent antioxidant serum to brighten, protect, and promote an even skin tone.</p>
-                            <a href="#" class="inline-block bg-brand-deep-green text-white px-8 py-3 rounded-full font-semibold hover:bg-opacity-90 transition-all duration-300">Shop Now</a>
+                    <!-- Product Card 2 -->
+                    <div class="bg-brand-cream rounded-lg group text-center fade-in-up" style="transition-delay: 200ms;">
+                         <div class="relative overflow-hidden rounded-lg">
+                            <img src="https://images.pexels.com/photos/5614644/pexels-photo-5614644.jpeg?auto=compress&cs=tinysrgb&w=800" alt="SaMoha Vitamin C Radiance Serum" class="w-full h-96 object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="py-6">
+                            <h3 class="text-lg font-semibold">Vitamin C Radiance Serum</h3>
+                            <p class="text-sm text-brand-stone my-1">Brightening & Protective</p>
+                            <p class="text-lg font-medium mt-2">₹1,800</p>
+                            <button class="mt-4 bg-brand-charcoal text-white text-sm px-6 py-2 rounded-full font-medium hover:bg-brand-gold transition-colors duration-300">Add to Bag</button>
                         </div>
                     </div>
-                    <!-- Product 3 --><div class="bg-white rounded-lg shadow-lg overflow-hidden group">
-                        <img src="https://placehold.co/600x600/FFFFFF/1a3a3a?text=Green+Tea+%26+Jojoba+Moisturizer" alt="Green Tea & Jojoba Moisturizer" class="w-full h-64 object-cover">
-                        <div class="p-6 text-center">
-                            <h3 class="text-xl font-bold mb-2">Green Tea & Jojoba Moisturizer</h3>
-                            <p class="text-brand-gray mb-4">Balances and nourishes with antioxidant power to support overall skin health.</p>
-                             <a href="#" class="inline-block bg-brand-deep-green text-white px-8 py-3 rounded-full font-semibold hover:bg-opacity-90 transition-all duration-300">Shop Now</a>
+                    <!-- Product Card 3 -->
+                    <div class="bg-brand-cream rounded-lg group text-center fade-in-up" style="transition-delay: 400ms;">
+                         <div class="relative overflow-hidden rounded-lg">
+                            <img src="https://images.pexels.com/photos/7262453/pexels-photo-7262453.jpeg?auto=compress&cs=tinysrgb&w=800" alt="SaMoha Green Tea & Jojoba Moisturizer" class="w-full h-96 object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="py-6">
+                            <h3 class="text-lg font-semibold">Green Tea & Jojoba Moisturizer</h3>
+                            <p class="text-sm text-brand-stone my-1">Balancing & Nourishing</p>
+                            <p class="text-lg font-medium mt-2">₹1,650</p>
+                            <button class="mt-4 bg-brand-charcoal text-white text-sm px-6 py-2 rounded-full font-medium hover:bg-brand-gold transition-colors duration-300">Add to Bag</button>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- The Ritual Section --><section id="ritual" class="py-20 md:py-32">
+        <!-- Ingredient Spotlight Section -->
+        <section id="ingredients" class="py-24">
             <div class="container mx-auto px-6">
-                 <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Simplicity is the Ultimate Sophistication</h2>
-                    <p class="max-w-2xl mx-auto text-brand-gray">Our 3-step ritual simplifies your daily routine, preventing choice overload and ensuring products work together seamlessly for optimal results.</p>
+                 <div class="text-center mb-16 max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-serif mb-4">The Wisdom of Indian Botanicals</h2>
+                    <p class="text-brand-charcoal/80">Each ingredient is chosen for its proven efficacy and historical significance in wellness traditions, delivering tangible results you can see and feel.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-center">
-                    <!-- Step 1 --><div class="flex flex-col items-center">
-                        <div class="w-24 h-24 border-2 border-brand-accent border-dashed rounded-full flex items-center justify-center mb-4">
-                            <span class="text-3xl font-bold text-brand-accent">01</span>
+                <!-- Ingredient Accordion -->
+                <div>
+                    <div class="border-b border-brand-charcoal/20">
+                        <button class="accordion-header w-full flex justify-between items-center py-6 text-left">
+                            <span class="text-2xl font-serif">Soothing Aloe Vera</span>
+                            <i data-lucide="plus" class="accordion-icon w-6 h-6 transition-transform"></i>
+                        </button>
+                        <div class="accordion-content max-h-0 overflow-hidden transition-all duration-500">
+                            <div class="pb-6 grid md:grid-cols-2 gap-8 items-center">
+                                <p class="text-brand-charcoal/80">A gentle, hydrating marvel formulated to calm the skin while effectively removing impurities without stripping its natural moisture barrier. It’s the perfect foundation for a healthy skincare routine.</p>
+                                <img src="https://images.pexels.com/photos/3985299/pexels-photo-3985299.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Close-up of fresh Aloe Vera leaves" class="rounded-lg object-cover w-full h-48">
+                            </div>
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Cleanse</h3>
-                        <p class="text-brand-gray">Start with a clean canvas using our Soothing Aloe Vera Cleanser.</p>
                     </div>
-                    <!-- Step 2 --><div class="flex flex-col items-center">
-                        <div class="w-24 h-24 border-2 border-brand-accent border-dashed rounded-full flex items-center justify-center mb-4">
-                            <span class="text-3xl font-bold text-brand-accent">02</span>
+                     <div class="border-b border-brand-charcoal/20">
+                        <button class="accordion-header w-full flex justify-between items-center py-6 text-left">
+                            <span class="text-2xl font-serif">Radiant Vitamin C</span>
+                            <i data-lucide="plus" class="accordion-icon w-6 h-6 transition-transform"></i>
+                        </button>
+                        <div class="accordion-content max-h-0 overflow-hidden transition-all duration-500">
+                            <div class="pb-6 grid md:grid-cols-2 gap-8 items-center">
+                                <p class="text-brand-charcoal/80">A potent antioxidant serum featuring a stable, scientifically-validated form of Vitamin C. It brightens the complexion, protects against environmental stressors, and promotes an even skin tone.</p>
+                                <img src="https://images.pexels.com/photos/1005698/pexels-photo-1005698.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Vitamin C serum bottle with orange slices" class="rounded-lg object-cover w-full h-48">
+                            </div>
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Treat</h3>
-                        <p class="text-brand-gray">Target concerns with the Vitamin C Radiance Serum.</p>
                     </div>
-                    <!-- Step 3 --><div class="flex flex-col items-center">
-                        <div class="w-24 h-24 border-2 border-brand-accent border-dashed rounded-full flex items-center justify-center mb-4">
-                            <span class="text-3xl font-bold text-brand-accent">03</span>
+                     <div class="border-b border-brand-charcoal/20">
+                        <button class="accordion-header w-full flex justify-between items-center py-6 text-left">
+                            <span class="text-2xl font-serif">Balancing Green Tea & Jojoba</span>
+                            <i data-lucide="plus" class="accordion-icon w-6 h-6 transition-transform"></i>
+                        </button>
+                        <div class="accordion-content max-h-0 overflow-hidden transition-all duration-500">
+                             <div class="pb-6 grid md:grid-cols-2 gap-8 items-center">
+                                <p class="text-brand-charcoal/80">A nourishing moisturizer that combines the antioxidant power of Green Tea Extract with the skin-mimicking properties of Jojoba Oil. It hydrates, balances, and supports overall skin health.</p>
+                                <img src="https://images.pexels.com/photos/4051566/pexels-photo-4051566.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Green tea leaves and skincare product" class="rounded-lg object-cover w-full h-48">
+                            </div>
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Moisturize</h3>
-                        <p class="text-brand-gray">Hydrate and protect with our Green Tea & Jojoba Moisturizer.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- About Us Section --><section id="about" class="py-20 md:py-32 bg-brand-beige">
-            <div class="container mx-auto px-6 text-center md:text-left">
-                <div class="md:flex md:items-center md:space-x-12">
-                    <div class="md:w-1/3 flex justify-center mb-8 md:mb-0">
-                        <img src="https://assets-vision-service.s3.eu-west-1.amazonaws.com/ceo.png" alt="CEO of SaMoha" class="w-64 h-64 rounded-full object-cover shadow-lg border-4 border-brand-accent">
-                    </div>
-                    <div class="md:w-2/3">
-                        <h2 class="text-3xl md:text-4xl font-bold mb-4">Meet Our Founder</h2>
-                        <h3 class="text-2xl font-semibold text-brand-accent mb-4">A Vision for Preventive Beauty</h3>
-                        <p class="text-brand-gray leading-relaxed mb-4">At SaMoha, we believe true beauty is cultivated through conscious choices and scientific understanding. Our founder, driven by a passion for holistic wellness and effective skincare, envisioned a brand that bridges traditional Indian remedies with modern dermatological science.</p>
-                        <p class="text-brand-gray leading-relaxed">With years of experience and a commitment to transparency, our CEO is dedicated to empowering you with knowledge and products that prevent future concerns, rather than just treating existing ones. SaMoha is more than just skincare; it's a philosophy for lifelong skin health.</p>
-                    </div>
+        <!-- Leadership Section -->
+        <section id="leadership" class="py-24 bg-brand-bg">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-serif mb-4">Our Leadership</h2>
+                    <p class="text-brand-charcoal/80">SaMoha will launch with a lean, agile organizational structure designed for rapid decision-making and capital efficiency, allowing for quick pivots to maximize ROI.</p>
                 </div>
-            </div>
-        </section>
-
-        <!-- Community Section --><section id="community" class="py-20 md:py-32 bg-brand-deep-green text-white">
-            <div class="container mx-auto px-6 text-center">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Join The SaMoha Community</h2>
-                <p class="max-w-3xl mx-auto mb-8">A community that believes in proactive, conscious skincare. Follow our journey, share your results, and be the first to know about new formulations.</p>
-                <div class="flex justify-center space-x-6 mb-12">
-                     <a href="#" aria-label="Instagram" class="hover:opacity-80 transition-opacity">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                    </a>
-                     <a href="#" aria-label="TikTok" class="hover:opacity-80 transition-opacity">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8"><path d="M16.5 6.5a4.2 4.2 0 1 1-8.4 0 4.2 4.2 0 1 1 8.4 0zM9 17.5V9.16M15 17.5V9.16a2.5 2.5 0 0 0-2.5-2.5h-1a2.5 2.5 0 0 0-2.5 2.5V17.5"></path></svg>
-                    </a>
-                </div>
-                <div class="max-w-xl mx-auto">
-                    <p class="mb-4">Subscribe for exclusive offers and skincare science.</p>
-                    <form class="flex flex-col sm:flex-row gap-4">
-                        <input type="email" placeholder="Enter your email" class="w-full px-4 py-3 rounded-full text-brand-deep-green focus:outline-none focus:ring-2 focus:ring-brand-accent" required>
-                        <button type="submit" class="bg-brand-accent text-brand-deep-green px-8 py-3 rounded-full font-semibold hover:bg-opacity-90 transition-colors duration-300">Subscribe</button>
-                    </form>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <!-- Leader Card 1 -->
+                    <div class="text-center fade-in-up">
+                        <img src="vikas.png" alt="Vikas Dadhwal, Founder & CEO of SaMoha" class="w-48 h-48 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="font-semibold text-xl">Vikas Dadhwal</h3>
+                        <p class="text-brand-gold">Founder & CEO</p>
+                        <p class="text-sm text-brand-charcoal/70 mt-2 max-w-xs mx-auto">Responsible for overall strategic direction, vision, brand integrity, and investor relations.</p>
+                    </div>
+                     <!-- Leader Card 2 -->
+                    <div class="text-center fade-in-up" style="transition-delay: 200ms;">
+                        <img src="https://placehold.co/400x400/F3EFEB/313131?text=ST" alt="Sanket Thorat" class="w-48 h-48 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="font-semibold text-xl">Sanket Thorat</h3>
+                        <p class="text-brand-gold">Head of Marketing</p>
+                        <p class="text-sm text-brand-charcoal/70 mt-2 max-w-xs mx-auto">Leads all brand communication, digital marketing, customer acquisition, and community-building efforts.</p>
+                    </div>
+                     <!-- Leader Card 3 -->
+                    <div class="text-center fade-in-up" style="transition-delay: 400ms;">
+                        <img src="jai.png" alt="Jaykumar Nanwani" class="w-48 h-48 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="font-semibold text-xl">Jaykumar Nanwani</h3>
+                        <p class="text-brand-gold">Product Development Lead</p>
+                        <p class="text-sm text-brand-charcoal/70 mt-2 max-w-xs mx-auto">Oversees R&D, formulation, ingredient sourcing, and ensures all products meet our stringent efficacy and safety standards.</p>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Footer --><footer class="bg-brand-light-green py-12">
-        <div class="container mx-auto px-6 text-center text-brand-gray">
-            <p class="text-xl font-bold text-brand-deep-green mb-4">SaMoha</p>
-            <div class="flex justify-center space-x-6 mb-6">
-                 <a href="#philosophy" class="hover:text-brand-accent">Our Philosophy</a>
-                 <a href="#products" class="hover:text-brand-accent">Products</a>
-                 <a href="#ritual" class="hover:text-brand-accent">The Ritual</a>
-                 <a href="#about" class="hover:text-brand-accent">About Us</a>
-                 <a href="#community" class="hover:text-brand-accent">Community</a>
+    <!-- Footer -->
+    <footer class="bg-brand-charcoal text-brand-cream pt-20 pb-10">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+                <div>
+                    <h3 class="text-2xl font-serif mb-4">SaMoha</h3>
+                    <p class="text-brand-cream/70 mb-4 text-sm">To empower individuals with proactive, clean, and effective skincare solutions.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-brand-gold"><i data-lucide="instagram"></i></a>
+                        <a href="#" class="hover:text-brand-gold"><i data-lucide="facebook"></i></a>
+                        <a href="#" class="hover:text-brand-gold"><i data-lucide="youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold tracking-wider mb-4">SHOP</h4>
+                    <ul class="space-y-2 text-brand-cream/70 text-sm">
+                        <li><a href="#" class="hover:text-brand-gold">The Ritual</a></li>
+                        <li><a href="#" class="hover:text-brand-gold">All Products</a></li>
+                        <li><a href="#" class="hover:text-brand-gold">Shop by Ingredient</a></li>
+                    </ul>
+                </div>
+                 <div>
+                    <h4 class="font-semibold tracking-wider mb-4">ABOUT</h4>
+                    <ul class="space-y-2 text-brand-cream/70 text-sm">
+                        <li><a href="#" class="hover:text-brand-gold">Our Story</a></li>
+                        <li><a href="#" class="hover:text-brand-gold">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-brand-gold">FAQs</a></li>
+                    </ul>
+                </div>
+                <div>
+                     <h4 class="font-semibold tracking-wider mb-4">JOIN OUR COMMUNITY</h4>
+                     <p class="text-brand-cream/70 mb-4 text-sm">Get exclusive offers and be the first to know about new launches.</p>
+                     <form class="flex">
+                        <input type="email" placeholder="Enter your email" class="w-full bg-brand-charcoal border border-brand-cream/20 px-4 py-2 rounded-l-md text-brand-cream focus:outline-none focus:border-brand-gold" required>
+                        <button type="submit" class="bg-brand-gold text-brand-charcoal px-4 py-2 rounded-r-md font-semibold hover:bg-opacity-90">
+                            <i data-lucide="arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
             </div>
-            <p>&copy; 2025 SaMoha. All Rights Reserved. Made with ♥ in India.</p>
+            <div class="border-t border-brand-cream/20 mt-10 pt-6 text-center text-brand-cream/50 text-xs">
+                <p>&copy; 2025 SaMoha. All Rights Reserved. Made with ♥ in India.</p>
+            </div>
         </div>
     </footer>
 
     <script>
+        lucide.createIcons();
+
         // Mobile menu toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
@@ -239,14 +336,6 @@
             mobileMenu.classList.toggle('hidden');
         });
 
-        // Close mobile menu when a link is clicked
-        const mobileMenuLinks = document.querySelectorAll('#mobile-menu a');
-        mobileMenuLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-            });
-        });
-        
         // Header shadow on scroll
         const header = document.getElementById('header');
         window.addEventListener('scroll', () => {
@@ -255,6 +344,40 @@
             } else {
                 header.classList.remove('shadow-md');
             }
+        });
+
+        // Simple fade-in animation on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    if (entry.target.classList.contains('reveal-bg')) {
+                        // For reveal-bg, we don't need to unobserve
+                    } else {
+                        // observer.unobserve(entry.target);
+                    }
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+        
+        document.querySelectorAll('.fade-in-up, .reveal-bg').forEach(el => observer.observe(el));
+
+        // Accordion script
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('.accordion-icon');
+                
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    icon.style.transform = 'rotate(0deg)';
+                } else {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    icon.style.transform = 'rotate(45deg)';
+                }
+            });
         });
     </script>
 
