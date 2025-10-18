@@ -1,407 +1,387 @@
-import React, { useState, useEffect, useRef } from 'react';
-
-// --- Icon Components (Replacing Lucide with inline SVGs for self-containment) ---
-
-const SearchIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-);
-
-const UserIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-);
-
-const ShoppingBagIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-);
-
-const MenuIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-);
-
-const TestTube2Icon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-gold mx-auto mb-4"><path d="M14.5 2v17.5c0 1.4-1.1 2.5-2.5 2.5h0c-1.4 0-2.5-1.1-2.5-2.5V2"></path><path d="M8.5 2h7"></path><path d="M14.5 16h-5"></path></svg>
-);
-
-const BookMarkedIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-gold mx-auto mb-4"><path d="M4 19.5V4.5A2.5 2.5 0 0 1 6.5 2h11A2.5 2.5 0 0 1 20 4.5v15A2.5 2.5 0 0 1 17.5 22h-11A2.5 2.5 0 0 1 4 19.5z"></path><polyline points="10 2 10 10 14 7 18 10 18 2"></polyline></svg>
-);
-
-const PackageCheckIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-gold mx-auto mb-4"><path d="M16 16.5l-3 3-1.5-1.5"></path><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"></path><path d="m7.5 4.21 9 5.15"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><line x1="12" y1="22" x2="12" y2="12"></line></svg>
-);
-
-const UsersIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-gold mx-auto mb-4"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-);
-
-const PlusIcon = ({ className }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-);
-
-const InstagramIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-);
-
-const FacebookIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
-);
-
-const YoutubeIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2A29 29 0 0 0 23 11.75a29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
-);
-
-const ArrowRightIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-);
-
-
-// --- Reusable Animated Component ---
-const AnimatedComponent = ({ children, delay = 0, reveal = false }) => {
-    const ref = useRef(null);
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaMoha - Preventive Skincare, Rooted in Science & Wisdom</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Lora', 'serif'],
+                    },
+                    colors: {
+                        'brand-cream': '#FBF9F6',
+                        'brand-charcoal': '#313131',
+                        'brand-gold': '#B08D57',
+                        'brand-stone': '#A9A9A9',
+                        'brand-bg': '#F3EFEB',
                     }
-                });
-            },
-            { threshold: 0.1 }
-        );
-
-        if (ref.current) {
-            observer.observe(ref.current);
-        }
-
-        return () => {
-            if (ref.current) {
-                observer.unobserve(ref.current);
+                }
             }
-        };
-    }, []);
-    
-    const style = {
-        transitionDelay: `${delay}ms`
-    };
+        }
+    </script>
+    <style>
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.645, 0.045, 0.355, 1), transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-bg {
+            position: relative;
+            overflow: hidden;
+        }
+        .reveal-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #FBF9F6;
+            transform: scaleX(1);
+            transform-origin: right;
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .reveal-bg.visible::after {
+            transform: scaleX(0);
+            transform-origin: left;
+        }
+    </style>
+</head>
+<body class="bg-brand-cream text-brand-charcoal font-sans antialiased">
 
-    return (
-        <div ref={ref} className={reveal ? 'reveal-bg' : 'fade-in-up'} style={style}>
-            {children}
-        </div>
-    );
-};
+    <!-- Announcement Bar -->
+    <div class="bg-brand-charcoal text-brand-cream text-center py-2.5 px-4 text-xs tracking-widest uppercase">
+        Complimentary Shipping on Orders Over ₹999
+    </div>
 
-// --- Header Component ---
-const Header = () => {
-    const [isMenuOpen, setMenuOpen] = useState(false);
-    const [isScrolled, setScrolled] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 10);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
-    return (
-        <header className={`bg-brand-cream/70 backdrop-blur-lg sticky top-0 z-50 transition-shadow duration-300 ${isScrolled ? 'shadow-md' : ''}`}>
-            <div className="container mx-auto px-6 py-5 flex justify-between items-center">
-                <a href="#" className="text-3xl font-serif font-medium tracking-tight">SaMoha</a>
-                <nav className="hidden lg:flex items-center space-x-10 text-sm">
-                    <a href="#ritual-products" className="hover:text-brand-gold transition-colors duration-300">The Ritual</a>
-                    <a href="#philosophy" className="hover:text-brand-gold transition-colors duration-300">Philosophy</a>
-                    <a href="#ingredients" className="hover:text-brand-gold transition-colors duration-300">Ingredients</a>
-                    <a href="#leadership" className="hover:text-brand-gold transition-colors duration-300">Our Team</a>
-                </nav>
-                <div className="flex items-center space-x-5">
-                    <button className="hover:text-brand-gold transition-colors duration-300"><SearchIcon /></button>
-                    <button className="hover:text-brand-gold transition-colors duration-300"><UserIcon /></button>
-                    <button className="hover:text-brand-gold transition-colors duration-300"><ShoppingBagIcon /></button>
-                    <button onClick={() => setMenuOpen(!isMenuOpen)} className="lg:hidden text-2xl">
-                        <MenuIcon />
-                    </button>
-                </div>
+    <!-- Header -->
+    <header id="header" class="bg-brand-cream/70 backdrop-blur-lg sticky top-0 z-50 transition-shadow duration-300">
+        <div class="container mx-auto px-6 py-5 flex justify-between items-center">
+            <a href="#" class="text-3xl font-serif font-medium tracking-tight">SaMoha</a>
+            <nav class="hidden lg:flex items-center space-x-10 text-sm">
+                <a href="#ritual-products" class="hover:text-brand-gold transition-colors duration-300">The Ritual</a>
+                <a href="#philosophy" class="hover:text-brand-gold transition-colors duration-300">Philosophy</a>
+                <a href="#ingredients" class="hover:text-brand-gold transition-colors duration-300">Ingredients</a>
+                <a href="#leadership" class="hover:text-brand-gold transition-colors duration-300">Our Team</a>
+            </nav>
+            <div class="flex items-center space-x-5">
+                 <button class="hover:text-brand-gold transition-colors duration-300"><i data-lucide="search" class="w-5 h-5"></i></button>
+                 <button class="hover:text-brand-gold transition-colors duration-300"><i data-lucide="user" class="w-5 h-5"></i></button>
+                 <button class="hover:text-brand-gold transition-colors duration-300"><i data-lucide="shopping-bag" class="w-5 h-5"></i></button>
+                 <button id="mobile-menu-button" class="lg:hidden text-2xl">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
             </div>
-            {isMenuOpen && (
-                <div className="lg:hidden px-6 pb-4 bg-brand-cream shadow-lg">
-                    <a href="#ritual-products" className="block py-2">The Ritual</a>
-                    <a href="#philosophy" className="block py-2">Philosophy</a>
-                    <a href="#ingredients" className="block py-2">Ingredients</a>
-                    <a href="#leadership" className="block py-2">Our Team</a>
-                </div>
-            )}
-        </header>
-    );
-};
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden px-6 pb-4 bg-brand-cream shadow-lg">
+            <a href="#ritual-products" class="block py-2">The Ritual</a>
+            <a href="#philosophy" class="block py-2">Philosophy</a>
+            <a href="#ingredients" class="block py-2">Ingredients</a>
+            <a href="#leadership" class="block py-2">Our Team</a>
+        </div>
+    </header>
 
-// --- Hero Section ---
-const HeroSection = () => (
-    <section className="relative h-[90vh] min-h-[700px] flex items-center bg-brand-bg">
-        <div className="container mx-auto px-6 grid md:grid-cols-2 items-center gap-12">
-            <AnimatedComponent>
-                 <div className="z-10">
-                    <h1 className="text-4xl md:text-6xl font-serif leading-tight mb-4">The Antidote to Confusion.</h1>
-                    <p className="text-lg md:text-xl text-brand-charcoal/80 mb-8 max-w-lg">
+    <main>
+        <!-- Hero Section -->
+        <section class="relative h-[90vh] min-h-[700px] flex items-center bg-brand-bg">
+             <div class="container mx-auto px-6 grid md:grid-cols-2 items-center gap-12">
+                <div class="z-10 fade-in-up">
+                    <h1 class="text-4xl md:text-6xl font-serif leading-tight mb-4">The Antidote to Confusion.</h1>
+                    <p class="text-lg md:text-xl text-brand-charcoal/80 mb-8 max-w-lg">
                         Rooted in the philosophy of prevention, we unite the wisdom of Indian botanicals with scientifically-validated, high-efficacy formulations.
                     </p>
-                    <a href="#ritual-products" className="bg-brand-charcoal text-white px-10 py-3.5 rounded-full font-semibold hover:bg-brand-gold transition-all duration-300 text-base group">
-                        Discover The Ritual <span className="inline-block transform group-hover:translate-x-1 transition-transform">→</span>
+                    <a href="#ritual-products" class="bg-brand-charcoal text-white px-10 py-3.5 rounded-full font-semibold hover:bg-brand-gold transition-all duration-300 text-base group">
+                        Discover The Ritual <span class="inline-block transform group-hover:translate-x-1 transition-transform">→</span>
                     </a>
                 </div>
-            </AnimatedComponent>
-            <div className="relative h-full hidden md:block">
-                <div className="absolute inset-0 w-full h-full flex items-center justify-center">
-                    <AnimatedComponent reveal>
-                        <img src="1760775191016.jpg" alt="Elegant skincare product bottles against a soft, neutral background" className="max-w-full h-auto object-contain" style={{ maxHeight: '80vh' }} />
-                    </AnimatedComponent>
+                 <div class="relative h-full hidden md:block">
+                     <div class="absolute inset-0 w-full h-full flex items-center justify-center">
+                         <img src="1760775191016.jpg" alt="Elegant skincare product bottles against a soft, neutral background" class="max-w-full h-auto object-contain reveal-bg" style="max-height: 80vh;">
+                     </div>
+                 </div>
+            </div>
+        </section>
+
+        <!-- Our Philosophy Section -->
+        <section id="philosophy" class="py-24">
+            <div class="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+                <div class="fade-in-up">
+                    <h2 class="text-3xl md:text-4xl font-serif mb-6">Precaution is the Best Way to Achieve Beauty.</h2>
+                    <p class="text-brand-charcoal/80 mb-6">Today's skincare consumer faces a crisis of trust. The market is saturated with mass-produced synthetics and unsubstantiated claims. This creates a powerful demand for a brand that delivers transparency, scientific validation, and tangible results.</p>
+                    <p class="text-brand-charcoal/80">SaMoha is that brand. We are the antidote. We empower you with proactive, clean, and effective solutions, making holistic, scientifically-backed beauty accessible to a new generation of conscious consumers.</p>
+                </div>
+                 <div class="grid grid-cols-2 gap-6 fade-in-up" style="transition-delay: 200ms;">
+                    <div class="bg-brand-bg p-8 rounded-lg text-center">
+                        <i data-lucide="test-tube-2" class="w-12 h-12 text-brand-gold mx-auto mb-4"></i>
+                        <h3 class="font-semibold text-lg mb-2">Dermocosmetics</h3>
+                        <p class="text-sm text-brand-charcoal/70">Clinical-grade results through botanical actives.</p>
+                    </div>
+                     <div class="bg-brand-bg p-8 rounded-lg text-center">
+                        <i data-lucide="book-marked" class="w-12 h-12 text-brand-gold mx-auto mb-4"></i>
+                        <h3 class="font-semibold text-lg mb-2">Radical Transparency</h3>
+                        <p class="text-sm text-brand-charcoal/70">Demystifying skincare with clear, honest information.</p>
+                    </div>
+                     <div class="bg-brand-bg p-8 rounded-lg text-center">
+                        <i data-lucide="package-check" class="w-12 h-12 text-brand-gold mx-auto mb-4"></i>
+                        <h3 class="font-semibold text-lg mb-2">Conscious Luxury</h3>
+                        <p class="text-sm text-brand-charcoal/70">Elegant, sustainable glass packaging.</p>
+                    </div>
+                    <div class="bg-brand-bg p-8 rounded-lg text-center">
+                        <i data-lucide="users" class="w-12 h-12 text-brand-gold mx-auto mb-4"></i>
+                        <h3 class="font-semibold text-lg mb-2">Inclusivity</h3>
+                        <p class="text-sm text-brand-charcoal/70">Products designed for a wide range of skin types and tones.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-);
+        </section>
 
-
-// --- Philosophy Section ---
-const PhilosophySection = () => (
-    <section id="philosophy" className="py-24">
-        <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-            <AnimatedComponent>
-                 <div>
-                    <h2 className="text-3xl md:text-4xl font-serif mb-6">Precaution is the Best Way to Achieve Beauty.</h2>
-                    <p className="text-brand-charcoal/80 mb-6">Today's skincare consumer faces a crisis of trust. The market is saturated with mass-produced synthetics and unsubstantiated claims. This creates a powerful demand for a brand that delivers transparency, scientific validation, and tangible results.</p>
-                    <p className="text-brand-charcoal/80">SaMoha is that brand. We are the antidote. We empower you with proactive, clean, and effective solutions, making holistic, scientifically-backed beauty accessible to a new generation of conscious consumers.</p>
+        <!-- Products Section: The Preventive Care Ritual -->
+        <section id="ritual-products" class="py-24 bg-brand-bg">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-serif mb-4">Meet The Preventive Care Ritual</h2>
+                    <p class="text-brand-charcoal/80">A curated "hero" line of three essential products designed to work in synergy. This is your complete, minimalist routine for long-term, proactive skin health.</p>
                 </div>
-            </AnimatedComponent>
-            <AnimatedComponent delay={200}>
-                <div className="grid grid-cols-2 gap-6">
-                    <div className="bg-brand-bg p-8 rounded-lg text-center">
-                        <TestTube2Icon />
-                        <h3 className="font-semibold text-lg mb-2">Dermocosmetics</h3>
-                        <p className="text-sm text-brand-charcoal/70">Clinical-grade results through botanical actives.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Product Card 1 -->
+                    <div class="bg-brand-cream rounded-lg group text-center fade-in-up">
+                        <div class="relative overflow-hidden rounded-lg">
+                            <img src="1760773134986.jpg" alt="SaMoha Soothing Aloe Vera Cleanser" class="w-full h-96 object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="py-6">
+                            <h3 class="text-lg font-semibold">Soothing Aloe Vera Cleanser</h3>
+                            <p class="text-sm text-brand-stone my-1">Gentle & Hydrating</p>
+                            <p class="text-lg font-medium mt-2">₹1,250</p>
+                            <button class="mt-4 bg-brand-charcoal text-white text-sm px-6 py-2 rounded-full font-medium hover:bg-brand-gold transition-colors duration-300">Add to Bag</button>
+                        </div>
                     </div>
-                    <div className="bg-brand-bg p-8 rounded-lg text-center">
-                        <BookMarkedIcon />
-                        <h3 className="font-semibold text-lg mb-2">Radical Transparency</h3>
-                        <p className="text-sm text-brand-charcoal/70">Demystifying skincare with clear, honest information.</p>
+                    <!-- Product Card 2 -->
+                    <div class="bg-brand-cream rounded-lg group text-center fade-in-up" style="transition-delay: 200ms;">
+                         <div class="relative overflow-hidden rounded-lg">
+                            <img src="1760773168001.jpg" alt="SaMoha Vitamin C Radiance Serum" class="w-full h-96 object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="py-6">
+                            <h3 class="text-lg font-semibold">Vitamin C Radiance Serum</h3>
+                            <p class="text-sm text-brand-stone my-1">Brightening & Protective</p>
+                            <p class="text-lg font-medium mt-2">₹1,800</p>
+                            <button class="mt-4 bg-brand-charcoal text-white text-sm px-6 py-2 rounded-full font-medium hover:bg-brand-gold transition-colors duration-300">Add to Bag</button>
+                        </div>
                     </div>
-                    <div className="bg-brand-bg p-8 rounded-lg text-center">
-                        <PackageCheckIcon />
-                        <h3 className="font-semibold text-lg mb-2">Conscious Luxury</h3>
-                        <p className="text-sm text-brand-charcoal/70">Elegant, sustainable glass packaging.</p>
-                    </div>
-                    <div className="bg-brand-bg p-8 rounded-lg text-center">
-                        <UsersIcon />
-                        <h3 className="font-semibold text-lg mb-2">Inclusivity</h3>
-                        <p className="text-sm text-brand-charcoal/70">Products designed for a wide range of skin types and tones.</p>
+                    <!-- Product Card 3 -->
+                    <div class="bg-brand-cream rounded-lg group text-center fade-in-up" style="transition-delay: 400ms;">
+                         <div class="relative overflow-hidden rounded-lg">
+                            <img src="1760773212954.jpg" alt="SaMoha Green Tea & Jojoba Moisturizer" class="w-full h-96 object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="py-6">
+                            <h3 class="text-lg font-semibold">Green Tea & Jojoba Moisturizer</h3>
+                            <p class="text-sm text-brand-stone my-1">Balancing & Nourishing</p>
+                            <p class="text-lg font-medium mt-2">₹1,650</p>
+                            <button class="mt-4 bg-brand-charcoal text-white text-sm px-6 py-2 rounded-full font-medium hover:bg-brand-gold transition-colors duration-300">Add to Bag</button>
+                        </div>
                     </div>
                 </div>
-            </AnimatedComponent>
-        </div>
-    </section>
-);
+            </div>
+        </section>
 
-
-// --- Products Section ---
-const ProductsSection = () => {
-    const products = [
-        { name: "Soothing Aloe Vera Cleanser", desc: "Gentle & Hydrating", price: "₹1,250", img: "1760773134986.jpg" },
-        { name: "Vitamin C Radiance Serum", desc: "Brightening & Protective", price: "₹1,800", img: "1760773168001.jpg" },
-        { name: "Green Tea & Jojoba Moisturizer", desc: "Balancing & Nourishing", price: "₹1,650", img: "1760773212954.jpg" }
-    ];
-
-    return (
-        <section id="ritual-products" className="py-24 bg-brand-bg">
-            <div className="container mx-auto px-6">
-                <div className="text-center mb-16 max-w-3xl mx-auto">
-                    <h2 className="text-3xl md:text-4xl font-serif mb-4">Meet The Preventive Care Ritual</h2>
-                    <p className="text-brand-charcoal/80">A curated "hero" line of three essential products designed to work in synergy. This is your complete, minimalist routine for long-term, proactive skin health.</p>
+        <!-- Ingredient Spotlight Section -->
+        <section id="ingredients" class="py-24">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-16 max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-serif mb-4">The Wisdom of Indian Botanicals</h2>
+                    <p class="text-brand-charcoal/80">Each ingredient is chosen for its proven efficacy and historical significance in wellness traditions, delivering tangible results you can see and feel.</p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {products.map((product, index) => (
-                        <AnimatedComponent key={product.name} delay={index * 200}>
-                            <div className="bg-brand-cream rounded-lg group text-center">
-                                <div className="relative overflow-hidden rounded-lg">
-                                    <img src={product.img} alt={`SaMoha ${product.name}`} className="w-full h-96 object-cover transform group-hover:scale-105 transition-transform duration-500" />
-                                </div>
-                                <div className="py-6">
-                                    <h3 className="text-lg font-semibold">{product.name}</h3>
-                                    <p className="text-sm text-brand-stone my-1">{product.desc}</p>
-                                    <p className="text-lg font-medium mt-2">{product.price}</p>
-                                    <button className="mt-4 bg-brand-charcoal text-white text-sm px-6 py-2 rounded-full font-medium hover:bg-brand-gold transition-colors duration-300">Add to Bag</button>
-                                </div>
+                <!-- Ingredient Accordion -->
+                <div>
+                    <div class="border-b border-brand-charcoal/20">
+                        <button class="accordion-header w-full flex justify-between items-center py-6 text-left">
+                            <span class="text-2xl font-serif">Soothing Aloe Vera</span>
+                            <i data-lucide="plus" class="accordion-icon w-6 h-6 transition-transform"></i>
+                        </button>
+                        <div class="accordion-content max-h-0 overflow-hidden transition-all duration-500">
+                            <div class="pb-6 grid md:grid-cols-2 gap-8 items-center">
+                                <p class="text-brand-charcoal/80">A gentle, hydrating marvel formulated to calm the skin while effectively removing impurities without stripping its natural moisture barrier. It’s the perfect foundation for a healthy skincare routine.</p>
+                                <img src="1760773937616.jpg" alt="Close-up of fresh Aloe Vera leaves" class="rounded-lg object-cover w-full h-48">
                             </div>
-                        </AnimatedComponent>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-};
-
-
-// --- Accordion Item Component ---
-const AccordionItem = ({ title, content, image, isOpen, onClick }) => {
-    const contentRef = useRef(null);
-    return (
-        <div className="border-b border-brand-charcoal/20">
-            <button onClick={onClick} className="w-full flex justify-between items-center py-6 text-left">
-                <span className="text-2xl font-serif">{title}</span>
-                <PlusIcon className={`w-6 h-6 transition-transform ${isOpen ? 'rotate-45' : ''}`} />
-            </button>
-            <div
-                ref={contentRef}
-                style={{ maxHeight: isOpen ? `${contentRef.current.scrollHeight}px` : '0px' }}
-                className="overflow-hidden transition-all duration-500"
-            >
-                <div className="pb-6 grid md:grid-cols-2 gap-8 items-center">
-                    <p className="text-brand-charcoal/80">{content}</p>
-                    <img src={image} alt={`Ingredient spotlight on ${title}`} className="rounded-lg object-cover w-full h-48" />
-                </div>
-            </div>
-        </div>
-    );
-};
-
-
-// --- Ingredients Section ---
-const IngredientsSection = () => {
-    const [openIndex, setOpenIndex] = useState(null);
-
-    const ingredients = [
-        { title: "Soothing Aloe Vera", content: "A gentle, hydrating marvel formulated to calm the skin while effectively removing impurities without stripping its natural moisture barrier. It’s the perfect foundation for a healthy skincare routine.", image: "1760773937616.jpg" },
-        { title: "Radiant Vitamin C", content: "A potent antioxidant serum featuring a stable, scientifically-validated form of Vitamin C. It brightens the complexion, protects against environmental stressors, and promotes an even skin tone.", image: "1760774057553.jpg" },
-        { title: "Balancing Green Tea & Jojoba", content: "A nourishing moisturizer that combines the antioxidant power of Green Tea Extract with the skin-mimicking properties of Jojoba Oil. It hydrates, balances, and supports overall skin health.", image: "1760774145034.jpg" }
-    ];
-
-    const handleClick = index => {
-        setOpenIndex(openIndex === index ? null : index);
-    };
-
-    return (
-        <section id="ingredients" className="py-24">
-            <div className="container mx-auto px-6">
-                <div className="text-center mb-16 max-w-3xl mx-auto">
-                    <h2 className="text-3xl md:text-4xl font-serif mb-4">The Wisdom of Indian Botanicals</h2>
-                    <p className="text-brand-charcoal/80">Each ingredient is chosen for its proven efficacy and historical significance in wellness traditions, delivering tangible results you can see and feel.</p>
-                </div>
-                <div>
-                    {ingredients.map((item, index) => (
-                        <AccordionItem
-                            key={item.title}
-                            title={item.title}
-                            content={item.content}
-                            image={item.image}
-                            isOpen={openIndex === index}
-                            onClick={() => handleClick(index)}
-                        />
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-};
-
-
-// --- Leadership Section ---
-const LeadershipSection = () => {
-    const leaders = [
-        { name: "Vikas Dadhwal", role: "Founder & CEO", desc: "Responsible for overall strategic direction, vision, brand integrity, and investor relations.", img: "vikas.png" },
-        { name: "Sanket Thorat", role: "Head of Marketing", desc: "Leads all brand communication, digital marketing, customer acquisition, and community-building efforts.", img: "sanket.jpg" },
-        { name: "Jaykumar Nanwani", role: "Product Development Lead", desc: "Oversees R&D, formulation, ingredient sourcing, and ensures all products meet our stringent efficacy and safety standards.", img: "jai.jpg" }
-    ];
-
-    return (
-        <section id="leadership" className="py-24 bg-brand-bg">
-            <div className="container mx-auto px-6">
-                <div className="text-center mb-16 max-w-3xl mx-auto">
-                    <h2 className="text-3xl md:text-4xl font-serif mb-4">Our Leadership</h2>
-                    <p className="text-brand-charcoal/80">SaMoha will launch with a lean, agile organizational structure designed for rapid decision-making and capital efficiency, allowing for quick pivots to maximize ROI.</p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                    {leaders.map((leader, index) => (
-                         <AnimatedComponent key={leader.name} delay={index * 200}>
-                            <div className="text-center">
-                                <img src={leader.img} alt={`${leader.name}, ${leader.role} of SaMoha`} className="w-48 h-48 rounded-full mx-auto mb-4 object-cover" />
-                                <h3 className="font-semibold text-xl">{leader.name}</h3>
-                                <p className="text-brand-gold">{leader.role}</p>
-                                <p className="text-sm text-brand-charcoal/70 mt-2 max-w-xs mx-auto">{leader.desc}</p>
+                        </div>
+                    </div>
+                     <div class="border-b border-brand-charcoal/20">
+                        <button class="accordion-header w-full flex justify-between items-center py-6 text-left">
+                            <span class="text-2xl font-serif">Radiant Vitamin C</span>
+                            <i data-lucide="plus" class="accordion-icon w-6 h-6 transition-transform"></i>
+                        </button>
+                        <div class="accordion-content max-h-0 overflow-hidden transition-all duration-500">
+                            <div class="pb-6 grid md:grid-cols-2 gap-8 items-center">
+                                <p class="text-brand-charcoal/80">A potent antioxidant serum featuring a stable, scientifically-validated form of Vitamin C. It brightens the complexion, protects against environmental stressors, and promotes an even skin tone.</p>
+                                <img src="1760774057553.jpg" alt="Vitamin C serum bottle with orange slices" class="rounded-lg object-cover w-full h-48">
                             </div>
-                        </AnimatedComponent>
-                    ))}
+                        </div>
+                    </div>
+                     <div class="border-b border-brand-charcoal/20">
+                        <button class="accordion-header w-full flex justify-between items-center py-6 text-left">
+                            <span class="text-2xl font-serif">Balancing Green Tea & Jojoba</span>
+                            <i data-lucide="plus" class="accordion-icon w-6 h-6 transition-transform"></i>
+                        </button>
+                        <div class="accordion-content max-h-0 overflow-hidden transition-all duration-500">
+                             <div class="pb-6 grid md:grid-cols-2 gap-8 items-center">
+                                <p class="text-brand-charcoal/80">A nourishing moisturizer that combines the antioxidant power of Green Tea Extract with the skin-mimicking properties of Jojoba Oil. It hydrates, balances, and supports overall skin health.</p>
+                                <img src="1760774145034.jpg" alt="Green tea leaves and skincare product" class="rounded-lg object-cover w-full h-48">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
-    );
-};
 
-// --- Footer Component ---
-const Footer = () => (
-    <footer className="bg-brand-charcoal text-brand-cream pt-20 pb-10">
-        <div className="container mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+        <!-- Leadership Section -->
+        <section id="leadership" class="py-24 bg-brand-bg">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-serif mb-4">Our Leadership</h2>
+                    <p class="text-brand-charcoal/80">SaMoha will launch with a lean, agile organizational structure designed for rapid decision-making and capital efficiency, allowing for quick pivots to maximize ROI.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <!-- Leader Card 1 -->
+                    <div class="text-center fade-in-up">
+                        <img src="vikas.png" alt="Vikas Dadhwal, Founder & CEO of SaMoha" class="w-48 h-48 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="font-semibold text-xl">Vikas Dadhwal</h3>
+                        <p class="text-brand-gold">Founder & CEO</p>
+                        <p class="text-sm text-brand-charcoal/70 mt-2 max-w-xs mx-auto">Responsible for overall strategic direction, vision, brand integrity, and investor relations.</p>
+                    </div>
+                     <!-- Leader Card 2 -->
+                    <div class="text-center fade-in-up" style="transition-delay: 200ms;">
+                        <img src="sanket.jpg" alt="Sanket Thorat" class="w-48 h-48 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="font-semibold text-xl">Sanket Thorat</h3>
+                        <p class="text-brand-gold">Head of Marketing</p>
+                        <p class="text-sm text-brand-charcoal/70 mt-2 max-w-xs mx-auto">Leads all brand communication, digital marketing, customer acquisition, and community-building efforts.</p>
+                    </div>
+                     <!-- Leader Card 3 -->
+                    <div class="text-center fade-in-up" style="transition-delay: 400ms;">
+                        <img src="jai.jpg" alt="Jaykumar Nanwani" class="w-48 h-48 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="font-semibold text-xl">Jaykumar Nanwani</h3>
+                        <p class="text-brand-gold">Product Development Lead</p>
+                        <p class="text-sm text-brand-charcoal/70 mt-2 max-w-xs mx-auto">Oversees R&D, formulation, ingredient sourcing, and ensures all products meet our stringent efficacy and safety standards.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-charcoal text-brand-cream pt-20 pb-10">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
                 <div>
-                    <h3 className="text-2xl font-serif mb-4">SaMoha</h3>
-                    <p className="text-brand-cream/70 mb-4 text-sm">To empower individuals with proactive, clean, and effective skincare solutions.</p>
-                    <div className="flex space-x-4">
-                        <a href="#" className="hover:text-brand-gold"><InstagramIcon /></a>
-                        <a href="#" className="hover:text-brand-gold"><FacebookIcon /></a>
-                        <a href="#" className="hover:text-brand-gold"><YoutubeIcon /></a>
+                    <h3 class="text-2xl font-serif mb-4">SaMoha</h3>
+                    <p class="text-brand-cream/70 mb-4 text-sm">To empower individuals with proactive, clean, and effective skincare solutions.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-brand-gold"><i data-lucide="instagram"></i></a>
+                        <a href="#" class="hover:text-brand-gold"><i data-lucide="facebook"></i></a>
+                        <a href="#" class="hover:text-brand-gold"><i data-lucide="youtube"></i></a>
                     </div>
                 </div>
                 <div>
-                    <h4 className="font-semibold tracking-wider mb-4">SHOP</h4>
-                    <ul className="space-y-2 text-brand-cream/70 text-sm">
-                        <li><a href="#" className="hover:text-brand-gold">The Ritual</a></li>
-                        <li><a href="#" className="hover:text-brand-gold">All Products</a></li>
-                        <li><a href="#" className="hover:text-brand-gold">Shop by Ingredient</a></li>
+                    <h4 class="font-semibold tracking-wider mb-4">SHOP</h4>
+                    <ul class="space-y-2 text-brand-cream/70 text-sm">
+                        <li><a href="#" class="hover:text-brand-gold">The Ritual</a></li>
+                        <li><a href="#" class="hover:text-brand-gold">All Products</a></li>
+                        <li><a href="#" class="hover:text-brand-gold">Shop by Ingredient</a></li>
                     </ul>
                 </div>
                  <div>
-                    <h4 className="font-semibold tracking-wider mb-4">ABOUT</h4>
-                    <ul className="space-y-2 text-brand-cream/70 text-sm">
-                        <li><a href="#" className="hover:text-brand-gold">Our Story</a></li>
-                        <li><a href="#" className="hover:text-brand-gold">Contact Us</a></li>
-                        <li><a href="#" className="hover:text-brand-gold">FAQs</a></li>
+                    <h4 class="font-semibold tracking-wider mb-4">ABOUT</h4>
+                    <ul class="space-y-2 text-brand-cream/70 text-sm">
+                        <li><a href="#" class="hover:text-brand-gold">Our Story</a></li>
+                        <li><a href="#" class="hover:text-brand-gold">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-brand-gold">FAQs</a></li>
                     </ul>
                 </div>
                 <div>
-                     <h4 className="font-semibold tracking-wider mb-4">JOIN OUR COMMUNITY</h4>
-                     <p className="text-brand-cream/70 mb-4 text-sm">Get exclusive offers and be the first to know about new launches.</p>
-                     <form className="flex">
-                        <input type="email" placeholder="Enter your email" className="w-full bg-brand-charcoal border border-brand-cream/20 px-4 py-2 rounded-l-md text-brand-cream focus:outline-none focus:border-brand-gold" required />
-                        <button type="submit" className="bg-brand-gold text-brand-charcoal px-4 py-2 rounded-r-md font-semibold hover:bg-opacity-90">
-                            <ArrowRightIcon />
+                     <h4 class="font-semibold tracking-wider mb-4">JOIN OUR COMMUNITY</h4>
+                     <p class="text-brand-cream/70 mb-4 text-sm">Get exclusive offers and be the first to know about new launches.</p>
+                     <form class="flex">
+                        <input type="email" placeholder="Enter your email" class="w-full bg-brand-charcoal border border-brand-cream/20 px-4 py-2 rounded-l-md text-brand-cream focus:outline-none focus:border-brand-gold" required>
+                        <button type="submit" class="bg-brand-gold text-brand-charcoal px-4 py-2 rounded-r-md font-semibold hover:bg-opacity-90">
+                            <i data-lucide="arrow-right"></i>
                         </button>
                     </form>
                 </div>
             </div>
-            <div className="border-t border-brand-cream/20 mt-10 pt-6 text-center text-brand-cream/50 text-xs">
+            <div class="border-t border-brand-cream/20 mt-10 pt-6 text-center text-brand-cream/50 text-xs">
                 <p>&copy; 2025 SaMoha. All Rights Reserved. Made with ♥ in India.</p>
             </div>
         </div>
     </footer>
-);
 
+    <script>
+        lucide.createIcons();
 
-// --- Main App Component ---
-export default function App() {
-    return (
-        <div className="bg-brand-cream text-brand-charcoal font-sans antialiased">
-            <div className="bg-brand-charcoal text-brand-cream text-center py-2.5 px-4 text-xs tracking-widest uppercase">
-                Complimentary Shipping on Orders Over ₹999
-            </div>
-            <Header />
-            <main>
-                <HeroSection />
-                <PhilosophySection />
-                <ProductsSection />
-                <IngredientsSection />
-                <LeadershipSection />
-            </main>
-            <Footer />
-        </div>
-    );
-}
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Header shadow on scroll
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                header.classList.add('shadow-md');
+            } else {
+                header.classList.remove('shadow-md');
+            }
+        });
+
+        // Simple fade-in animation on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    if (entry.target.classList.contains('reveal-bg')) {
+                        // For reveal-bg, we don't need to unobserve
+                    } else {
+                        // observer.unobserve(entry.target);
+                    }
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+        
+        document.querySelectorAll('.fade-in-up, .reveal-bg').forEach(el => observer.observe(el));
+
+        // Accordion script
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('.accordion-icon');
+                
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    icon.style.transform = 'rotate(0deg)';
+                } else {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    icon.style.transform = 'rotate(45deg)';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
+
 
